@@ -120,7 +120,7 @@ npm run server
 npm run dev
 ```
 
-Open [http://localhost:5173](http://localhost:5173) in your browser.
+Open [https://expense-client-omega.vercel.app/](https://expense-client-omega.vercel.app/) in your browser.
 
 <br/>
 
