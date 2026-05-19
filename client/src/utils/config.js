@@ -1,3 +1,3 @@
-const BASE_URL = "http://localhost:5000";
+const BASE_URL = "https://expense-tracker-api-5mk0.onrender.com"
 
 export { BASE_URL };
