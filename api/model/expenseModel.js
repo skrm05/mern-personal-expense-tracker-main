@@ -1,6 +1,5 @@
 import mongoose from "mongoose";
 
-// Define the expense schema
 const expenseSchema = new mongoose.Schema(
   {
     userId: {
@@ -30,7 +29,6 @@ const expenseSchema = new mongoose.Schema(
   }
 );
 
-// Create the expense model
 const expenseModel = mongoose.model("Expense", expenseSchema);
 
 export default expenseModel;

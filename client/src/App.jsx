@@ -10,50 +10,67 @@ import Dashboard from "./pages/home_pages/Dashboard";
 import Settings from "./pages/home_pages/Settings";
 import { ExpenseProvider } from "./global_context/ExpenseProvider";
 import PrivateRoute from "./components/private_route/PrivateRoute.jsx";
+import { PublicRoute } from "./components/public_route/PublicRoute.jsx";
+import { NotFound } from "./pages/NotFound";
 
 function App() {
   return (
     <UserProvider>
-      <ExpenseProvider>
-        <Layout />
-        <Routes>
+      <Layout />
+      <Routes>
+        <Route
+          path="/"
+          element={
+            <PrivateRoute>
+              <ExpenseProvider>
+                <Home />
+              </ExpenseProvider>
+            </PrivateRoute>
+          }
+        >
           <Route
-            path="/"
+            path="expences"
             element={
               <PrivateRoute>
-                <Home />
+                <Expenses />
               </PrivateRoute>
             }
-          >
-            <Route
-              path="expences"
-              element={
-                <PrivateRoute>
-                  <Expenses />
-                </PrivateRoute>
-              }
-            />
-            <Route
-              path="dashboard"
-              element={
-                <PrivateRoute>
-                  <Dashboard />
-                </PrivateRoute>
-              }
-            />
-            <Route
-              path="settings"
-              element={
-                <PrivateRoute>
-                  <Settings />
-                </PrivateRoute>
-              }
-            />
-          </Route>
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-        </Routes>
-      </ExpenseProvider>
+          />
+          <Route
+            path="dashboard"
+            element={
+              <PrivateRoute>
+                <Dashboard />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="settings"
+            element={
+              <PrivateRoute>
+                <Settings />
+              </PrivateRoute>
+            }
+          />
+        </Route>
+        <Route
+          path="/login"
+          element={
+            <PublicRoute>
+              <Login />
+            </PublicRoute>
+          }
+        />
+        <Route
+          path="/register"
+          element={
+            <PublicRoute>
+              <Register />
+            </PublicRoute>
+          }
+        />
+        <Route path="*" element={<NotFound />} />
+      </Routes>
     </UserProvider>
   );
 }

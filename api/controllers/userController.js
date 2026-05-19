@@ -8,6 +8,10 @@ config();
 
 //user register
 export const userRegister = async (req, res) => {
+  if (!req.body)
+    return res
+      .status(400)
+      .send({ message: "Please provide all required fields" });
   try {
     // console.log(req.body);
     const { username, email, password } = req.body;
@@ -39,9 +43,14 @@ export const userRegister = async (req, res) => {
 
 //user login
 export const userLogin = async (req, res) => {
+  if (!req.body)
+    return res.status(400).send({ message: "Username or password is missing" });
   try {
     const { username, password } = req.body;
     const userDoc = await userModel.findOne({ username });
+    if (!userDoc) {
+      return res.status(401).send({ message: "User not found!" });
+    }
     const checkPass = bcrypt.compareSync(password, userDoc.password);
     if (checkPass) {
       const userId = userDoc._id;
@@ -69,6 +78,12 @@ export const userLogin = async (req, res) => {
 
 //user profile
 export const userProfile = async (req, res) => {
+  if (!req.cookies.auth_token) {
+    return res.status(401).send({ message: "Unauthorized" });
+  }
+  if (!req.userId) {
+    return res.status(401).send({ message: "Unauthorized" });
+  }
   try {
     const userId = req.userId;
     const userDetails = await userModel
@@ -127,7 +142,7 @@ export const getUserExpenses = async (req, res) => {
     const { category } = req.query;
     const query = { userId };
     if (category === "none") {
-      const expenses = await expenseModel.find(query);
+      const expenses = await expenseModel.find(query).sort({ date: -1 });
       if (!expenses) {
         return res.status(400).send({ message: "User not found" });
       }
@@ -136,7 +151,7 @@ export const getUserExpenses = async (req, res) => {
     if (category) {
       query.category = category;
     }
-    const userExpenses = await expenseModel.find(query);
+    const userExpenses = await expenseModel.find(query).sort({ date: -1 });
     if (!userExpenses) {
       return res.status(400).send({ message: "User not found" });
     }
@@ -174,7 +189,7 @@ export const updateUserExpenses = async (req, res) => {
     const updateExpense = await expenseModel.findByIdAndUpdate(
       id,
       { date, amount, category, description },
-      { new: true, runValidators: true }
+      { new: true, runValidators: true },
     );
     if (!updateExpense) {
       res.status(400).send({ message: "Expense not updated" });
@@ -193,7 +208,7 @@ export const getUserExpensesCategories = async (req, res) => {
     const userId = req.userId;
     const categories = await expenseModel.find(
       { userId },
-      { category: 1, _id: 1 }
+      { category: 1, _id: 1 },
     );
 
     const uniqueCategories = [];

@@ -1,39 +1,35 @@
 import React, { createContext, useState, useEffect, useCallback } from "react";
 import { BASE_URL } from "../utils/config";
 
-export const ExpensesContext = createContext();
+export const ExpensesContext = createContext(null);
 
 export const ExpenseProvider = ({ children }) => {
   const [expenses, setExpenses] = useState([]);
   const [categories, setCategories] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("");
 
-  useEffect(() => {
-    fetchCategories();
-  }, [expenses]);
-
-  useEffect(() => {
-    fetchExpenses();
-  }, [selectedCategory]);
-
   const fetchExpenses = useCallback(async () => {
     try {
       let url = `${BASE_URL}/users/expenses`;
+
       if (selectedCategory) {
-        url += `?category=${selectedCategory}`;
+        url += `?category=${encodeURIComponent(selectedCategory)}`;
       }
+
       const response = await fetch(url, {
         method: "GET",
         credentials: "include",
       });
-      if (response.ok) {
-        const data = await response.json();
-        setExpenses(data);
-      } else {
-        console.error("failed to fetch data");
+
+      if (!response.ok) {
+        throw new Error("Failed to fetch expenses");
       }
+
+      const data = await response.json();
+
+      setExpenses(Array.isArray(data) ? data : []);
     } catch (err) {
-      console.error(err.message);
+      console.error("Expense Fetch Error:", err.message);
     }
   }, [selectedCategory]);
 
@@ -43,28 +39,38 @@ export const ExpenseProvider = ({ children }) => {
         method: "GET",
         credentials: "include",
       });
-      if (response.ok) {
-        const data = await response.json();
-        setCategories(data);
-      } else {
-        console.error(response.message);
+
+      if (!response.ok) {
+        throw new Error("Failed to fetch categories");
       }
+
+      const data = await response.json();
+
+      setCategories(Array.isArray(data) ? data : []);
     } catch (err) {
-      console.error(err.message);
+      console.error("Category Fetch Error:", err.message);
     }
   }, []);
 
+  useEffect(() => {
+    fetchCategories();
+  }, [fetchCategories]);
+
+  useEffect(() => {
+    fetchExpenses();
+  }, [fetchExpenses]);
+
+  const value = {
+    expenses,
+    categories,
+    selectedCategory,
+    setExpenses,
+    setSelectedCategory,
+    fetchExpenses,
+  };
+
   return (
-    <ExpensesContext.Provider
-      value={{
-        expenses,
-        categories,
-        selectedCategory,
-        setExpenses,
-        setSelectedCategory,
-        fetchExpenses,
-      }}
-    >
+    <ExpensesContext.Provider value={value}>
       {children}
     </ExpensesContext.Provider>
   );

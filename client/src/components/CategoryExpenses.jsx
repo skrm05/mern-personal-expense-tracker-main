@@ -10,13 +10,14 @@ import {
   HStack,
   Flex,
   useColorModeValue,
+  flattenTokens,
 } from "@chakra-ui/react";
 import { CurrencyRupee } from "@styled-icons/heroicons-solid/CurrencyRupee";
 import { Category } from "@styled-icons/boxicons-solid/Category";
 import { PiggyBank } from "@styled-icons/fa-solid/PiggyBank";
 
 const CategoryExpenses = ({ expenses }) => {
-  const [timePeriod, setTimePeriod] = useState("monthly");
+  const [timePeriod, setTimePeriod] = useState("yearly");
   const [totalSpending, setTotalSpending] = useState(0);
   const [spendingByCategory, setSpendingByCategory] = useState({});
 
@@ -30,21 +31,32 @@ const CategoryExpenses = ({ expenses }) => {
     const now = new Date();
     switch (timePeriod) {
       case "daily":
-        filteredExpenses = expenses.filter(
-          (expense) =>
-            new Date(expense.date).toDateString() === now.toDateString()
-        );
+        filteredExpenses = expenses.filter((expense) => {
+          return new Date(expense.date).toDateString() === now.toDateString();
+        });
+
         break;
       case "weekly": {
-        const startOfWeek = new Date(now.setDate(now.getDate() - now.getDay()));
-        filteredExpenses = expenses.filter(
-          (expense) => new Date(expense.date) >= startOfWeek
-        );
+        const startOfWeek = new Date(now);
+        // console.log(now.getDate() - now.getDay());
+        // const startOfWeek = new Date(now.setDate(now.getDate() - now.getDay()));
+        startOfWeek.setDate(now.getDate() - now.getDay());
+        startOfWeek.setHours(0, 0, 0, 0);
+        filteredExpenses = expenses.filter((expense) => {
+          // console.log(new Date(expense.date));
+          return new Date(expense.date) >= startOfWeek;
+        });
         break;
       }
       case "monthly":
         filteredExpenses = expenses.filter(
-          (expense) => new Date(expense.date).getMonth() === now.getMonth()
+          (expense) => new Date(expense.date).getMonth() === now.getMonth(),
+        );
+        break;
+      case "yearly":
+        filteredExpenses = expenses.filter(
+          (expense) =>
+            new Date(expense.date).getFullYear() === now.getFullYear(),
         );
         break;
       default:
@@ -53,7 +65,7 @@ const CategoryExpenses = ({ expenses }) => {
 
     const total = filteredExpenses.reduce(
       (acc, expense) => acc + expense.amount,
-      0
+      0,
     );
     setTotalSpending(total);
 
@@ -101,9 +113,10 @@ const CategoryExpenses = ({ expenses }) => {
             backgroundColor: bgColor,
           }}
         >
-          <option value="daily">Daily</option>
-          <option value="weekly">Weekly</option>
-          <option value="monthly">Monthly</option>
+          <option value="daily">Today</option>
+          <option value="weekly">This Week</option>
+          <option value="monthly">This Month</option>
+          <option value="yearly">This Year</option>
         </Select>
         <Card style={neumorphismStyle}>
           <CardBody>

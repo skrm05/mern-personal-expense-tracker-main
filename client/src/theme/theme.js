@@ -3,10 +3,10 @@ import { extendTheme } from "@chakra-ui/react";
 const theme = extendTheme({
   colors: {
     background: {
-      light: "#f5f5f5", // Light mode background
-      secondary: "#f56767ff", // Light mode secondary background
-      dark: "#1a202c", // Dark mode background
-      secondaryDark: "#2d3748", // Dark mode secondary background
+      light: "#f5f7fb",
+      secondary: "#ffffff",
+      dark: "#1a202c",
+      secondaryDark: "#2d3748",
     },
     text: {
       primary: "#2d3436", // Light mode primary text

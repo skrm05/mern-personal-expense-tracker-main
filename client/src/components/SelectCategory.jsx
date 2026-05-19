@@ -6,7 +6,6 @@ const SelectCategory = ({
   handleCategoryChange,
   categories,
 }) => {
-  // Define color values based on color mode
   const textColor = useColorModeValue("text.primary", "text.primaryDark");
   const bgColor = useColorModeValue("#e0e0e0", "#1a1a1a");
   const borderColor = useColorModeValue("#e0e0e0", "#1f1f1f");
