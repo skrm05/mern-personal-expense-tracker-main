@@ -1,10 +1,10 @@
-# 💸 Expense Tracker
+# Expense Tracker
 
 > A full-stack personal finance management application to track, visualize, and analyze your daily spending — built with a clean and insightful data dashboards.
 
 <br/>
 
-## 📸 Screenshots
+## Screenshots
 
 | Login                                       | Register                                          |
 | ------------------------------------------- | ------------------------------------------------- |
@@ -16,7 +16,7 @@
 
 <br/>
 
-## ✨ Features
+## Features
 
 **Authentication**
 
@@ -65,7 +65,7 @@
 
 <br/>
 
-## 🚀 Getting Started
+## Getting Started
 
 ### Prerequisites
 
@@ -124,7 +124,7 @@ Open [http://localhost:5173](http://localhost:5173) in your browser.
 
 <br/>
 
-## 📡 API Reference
+## API Reference
 
 | Method   | Endpoint            | Description                        | Auth Required |
 | -------- | ------------------- | ---------------------------------- | :-----------: |
@@ -140,7 +140,7 @@ Open [http://localhost:5173](http://localhost:5173) in your browser.
 
 <br/>
 
-## 📦 Build for Production
+## Build for Production
 
 ```bash
 # Build the React client
@@ -152,7 +152,7 @@ NODE_ENV=production npm start
 
 <br/>
 
-## 🔐 Security Highlights
+## Security Highlights
 
 - Passwords hashed with **bcrypt** (salt rounds: 12)
 - All expense endpoints protected by **JWT middleware**
@@ -162,7 +162,7 @@ NODE_ENV=production npm start
 
 <br/>
 
-## 🤝 Contributing
+## Contributing
 
 Contributions are welcome! Here's how to get started:
 
@@ -187,13 +187,13 @@ Please make sure your code:
 
 <br/>
 
-## 📄 License
+## License
 
 This project is licensed under the [MIT License](./LICENSE).
 
 <br/>
 
-## 👤 Author
+## Author
 
 **SK**
 

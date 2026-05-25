@@ -6,14 +6,12 @@ import expenseModel from "../model/expenseModel.js";
 import { response } from "express";
 config();
 
-//user register
 export const userRegister = async (req, res) => {
   if (!req.body)
     return res
       .status(400)
       .send({ message: "Please provide all required fields" });
   try {
-    // console.log(req.body);
     const { username, email, password } = req.body;
     const existingUser = await userModel.findOne({
       $or: [{ email }, { username }],
@@ -114,7 +112,6 @@ export const userLogout = (req, res) => {
 export const userNewExpenses = async (req, res) => {
   try {
     const userId = req.userId;
-    // console.log(userId);
     const { date, amount, category, description } = req.body;
     const expenseDoc = new expenseModel({
       userId: userId,
@@ -168,7 +165,6 @@ export const deleteUserExpenses = async (req, res) => {
   try {
     const userId = req.userId;
     const { id } = req.params;
-    // console.log(id);
     const reponse = await expenseModel.findByIdAndDelete(id);
     if (!response) {
       res.status(400).send({ message: "Expense not deleted" });

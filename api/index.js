@@ -9,9 +9,8 @@ import { notFound } from "./middlewares/notFound.js";
 async function mainEntryFunction() {
   config("./.env");
   const app = express();
-  const allowedOrigins = (process.env.CORS_ORIGINS || "http://localhost:5173")
-    .split(",")
-    .filter(Boolean);
+  const allowedOrigins = process.env.CORS_ORIGINS.split(",").filter(Boolean);
+
   app.use(
     cors({
       credentials: true,
@@ -26,9 +25,9 @@ async function mainEntryFunction() {
 
   app.use(notFound);
 
-  const PORT = Number(process.env.PORT) || 7000;
+  const PORT = Number(process.env.PORT);
   app.listen(PORT, () => {
-    console.log(`App is Listening on http://localhost:${PORT}`);
+    console.log(`App is Listening on ${PORT}`);
     dbConnect();
   });
 }
